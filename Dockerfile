@@ -4,12 +4,12 @@ FROM node:18-alpine
 # Set working directory
 WORKDIR /app
 
-# Copy package files first
-COPY package*.json ./
-
 # Clean npm cache and install dependencies
 RUN npm cache clean --force && \
     npm install --no-audit --no-fund
+
+# Copy package files
+COPY package*.json ./
 
 # Copy source code
 COPY . .
