@@ -1,0 +1,29 @@
+Security Event: Impossible Travel Login Detected
+
+Timestamp: 2026-02-18T08:15:00Z
+User: john.doe@company.com
+Source IP: 192.168.1.50 (New York, USA)
+Application: VPN
+Result: Success
+
+Timestamp: 2026-02-18T08:20:00Z
+User: john.doe@company.com
+Source IP: 203.0.113.25 (Tokyo, Japan)
+Application: Office 365
+Result: Success
+
+Analysis:
+- Successful login from New York at 08:15 UTC
+- Successful login from Tokyo at 08:20 UTC (5 minutes later)
+- Distance between locations: ~10,850 km
+- Impossible travel time: Would require supersonic travel
+- Indicates potential account compromise or session hijacking
+
+MITRE Technique: T1078 - Valid Accounts
+Risk Score: 75 (High)
+Recommended Actions:
+- Force password reset
+- Revoke all active sessions
+- Block current IP addresses
+- Enable MFA revalidation
+- Escalate to security analyst for investigation

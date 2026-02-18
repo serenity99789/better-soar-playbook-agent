@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SOAR Playbook Generator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+        
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .main-content {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .tabs {
+            display: flex;
+            background: #f8f9fa;
+            border-bottom: 1px solid #dee2e6;
+        }
+        
+        .tab {
+            flex: 1;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            border: none;
+            background: none;
+            font-size: 1rem;
+            font-weight: 500;
+            color: #6c757d;
+            transition: all 0.3s ease;
+        }
+        
+        .tab:hover {
+            background: #e9ecef;
+        }
+        
+        .tab.active {
+            background: white;
+            color: #007bff;
+            border-bottom: 3px solid #007bff;
+        }
+        
+        .tab-content {
+            padding: 30px;
+            min-height: 500px;
+        }
+        
+        .tab-panel {
+            display: none;
+        }
+        
+        .tab-panel.active {
+            display: block;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #495057;
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ced4da;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+        
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #007bff;
+            box-shadow: 0 0 0 3px rgba(0,123,255,0.1);
+        }
+        
+        textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+        
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary {
+            background: #007bff;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #0056b3;
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background: #545b62;
+        }
+        
+        .file-upload {
+            border: 2px dashed #ced4da;
+            border-radius: 8px;
+            padding: 40px;
+            text-align: center;
+            transition: border-color 0.3s ease;
+        }
+        
+        .file-upload:hover {
+            border-color: #007bff;
+        }
+        
+        .file-upload.dragover {
+            border-color: #007bff;
+            background: #f8f9ff;
+        }
+        
+        .results {
+            margin-top: 30px;
+        }
+        
+        .playbook-result {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .playbook-header {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .playbook-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #495057;
+        }
+        
+        .playbook-meta {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+        
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.9rem;
+            color: #6c757d;
+        }
+        
+        .query-block {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            margin: 10px 0;
+            overflow-x: auto;
+        }
+        
+        .mitre-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 10px 0;
+        }
+        
+        .mitre-tag {
+            background: #007bff;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+        }
+        
+        .search-form {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #6c757d;
+        }
+        
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+        
+        .success {
+            background: #d4edda;
+            color: #155724;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+        
+        .reverse-result {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .relevance-score {
+            display: inline-block;
+            background: #28a745;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            margin-left: 10px;
+        }
+        
+        .matched-elements {
+            margin-top: 10px;
+            font-size: 0.9rem;
+            color: #6c757d;
+        }
+        
+        .reverse-query {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 10px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.8rem;
+            margin: 5px 0;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🛡️ SOAR Playbook Generator</h1>
+            <p>AI-powered Security Playbook Generation with MITRE ATT&CK Mapping</p>
+        </header>
+        
+        <div class="main-content">
+            <div class="tabs">
+                <button class="tab active" onclick="switchTab('generate')">Generate Playbook</button>
+                <button class="tab" onclick="switchTab('reverse')">Reverse Query Search</button>
+                <button class="tab" onclick="switchTab('templates')">Templates</button>
+            </div>
+            
+            <div class="tab-content">
+                <!-- Generate Playbook Tab -->
+                <div id="generate-tab" class="tab-panel active">
+                    <form id="playbook-form">
+                        <div class="form-group">
+                            <label for="input-type">Input Type</label>
+                            <select id="input-type" onchange="toggleInputType()">
+                                <option value="text">Text Input</option>
+                                <option value="file">File Upload</option>
+                            </select>
+                        </div>
+                        
+                        <div id="text-input" class="form-group">
+                            <label for="playbook-text">Enter Security Event Description</label>
+                            <textarea id="playbook-text" placeholder="Describe the security event or use case...&#10;Example: Multiple failed login attempts from IP 192.168.1.100 followed by successful login for user admin@company.com"></textarea>
+                        </div>
+                        
+                        <div id="file-input" class="form-group" style="display: none;">
+                            <label>Upload Security Log or IRP File</label>
+                            <div class="file-upload" id="file-drop-zone">
+                                <input type="file" id="file-input-field" accept=".txt,.json,.csv,.log,.irp" style="display: none;">
+                                <p>📁 Drag and drop file here or click to browse</p>
+                                <p style="font-size: 0.9rem; color: #6c757d; margin-top: 10px;">Supported formats: .txt, .json, .csv, .log, .irp</p>
+                            </div>
+                        </div>
+                        
+                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px;">
+                            <div class="form-group">
+                                <label for="platform">Target Platform</label>
+                                <select id="platform">
+                                    <option value="splunk">Splunk (CIM)</option>
+                                    <option value="chronicle">Google SecOps (Chronicle)</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="category">Category</label>
+                                <select id="category">
+                                    <option value="">Auto-detect</option>
+                                    <option value="identity">Identity</option>
+                                    <option value="malware">Malware</option>
+                                    <option value="phishing">Phishing</option>
+                                    <option value="network">Network</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="severity">Severity</label>
+                                <select id="severity">
+                                    <option value="">Auto-calculate</option>
+                                    <option value="low">Low</option>
+                                    <option value="medium">Medium</option>
+                                    <option value="high">High</option>
+                                    <option value="critical">Critical</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary">🚀 Generate Playbook</button>
+                    </form>
+                    
+                    <div id="generate-results" class="results"></div>
+                </div>
+                
+                <!-- Reverse Query Search Tab -->
+                <div id="reverse-tab" class="tab-panel">
+                    <form id="reverse-form">
+                        <div class="search-form">
+                            <input type="text" id="reverse-query" placeholder="Enter your query to find matching playbooks...&#10;Example: | tstats count from datamodel=Authentication where Authentication.action=failure" style="padding: 12px;">
+                            <button type="submit" class="btn btn-primary">🔍 Search</button>
+                        </div>
+                        
+                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px;">
+                            <div class="form-group">
+                                <label for="reverse-platform">Platform</label>
+                                <select id="reverse-platform">
+                                    <option value="splunk">Splunk</option>
+                                    <option value="chronicle">Chronicle</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="reverse-category">Category Filter</label>
+                                <select id="reverse-category">
+                                    <option value="">All Categories</option>
+                                    <option value="identity">Identity</option>
+                                    <option value="malware">Malware</option>
+                                    <option value="phishing">Phishing</option>
+                                    <option value="network">Network</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="reverse-severity">Severity Filter</label>
+                                <select id="reverse-severity">
+                                    <option value="">All Severities</option>
+                                    <option value="low">Low</option>
+                                    <option value="medium">Medium</option>
+                                    <option value="high">High</option>
+                                    <option value="critical">Critical</option>
+                                </select>
+                            </div>
+                        </div>
+                    </form>
+                    
+                    <div id="reverse-results" class="results"></div>
+                </div>
+                
+                <!-- Templates Tab -->
+                <div id="templates-tab" class="tab-panel">
+                    <h3>Use Case Templates</h3>
+                    <p style="color: #6c757d; margin-bottom: 20px;">Pre-defined templates for common security scenarios</p>
+                    
+                    <div id="templates-list"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="bundle.js"></script>
+</body>
+</html>

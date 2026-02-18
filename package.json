@@ -1,0 +1,51 @@
+{
+  "name": "soar-playbook-generator",
+  "version": "1.0.0",
+  "description": "AI-powered SOAR Playbook Generator with MITRE ATT&CK mapping and reverse query capabilities",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js",
+    "build": "npm run build:client",
+    "build:client": "webpack --mode production",
+    "dev:client": "webpack serve --mode development",
+    "test": "jest"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "multer": "^1.4.5-lts.1",
+    "cors": "^2.8.5",
+    "helmet": "^7.1.0",
+    "express-rate-limit": "^7.1.5",
+    "uuid": "^9.0.1",
+    "lodash": "^4.17.21",
+    "moment": "^2.29.4",
+    "joi": "^17.11.0",
+    "fs-extra": "^11.1.1",
+    "path": "^0.12.7"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2",
+    "webpack": "^5.89.0",
+    "webpack-cli": "^5.1.4",
+    "webpack-dev-server": "^4.15.1",
+    "html-webpack-plugin": "^5.5.3",
+    "css-loader": "^6.8.1",
+    "style-loader": "^3.3.3",
+    "babel-loader": "^9.1.3",
+    "@babel/core": "^7.23.6",
+    "@babel/preset-env": "^7.23.6",
+    "jest": "^29.7.0"
+  },
+  "keywords": [
+    "soar",
+    "security",
+    "playbook",
+    "mitre",
+    "automation",
+    "siem",
+    "threat-detection"
+  ],
+  "author": "SOAR Security Team",
+  "license": "MIT"
+}

@@ -1,0 +1,53 @@
+## Incident Response Playbook: Phishing Email Detection
+
+### Use Case Information
+**Category**: Phishing  
+**Sub-Category**: Email Attack  
+**Severity**: Medium  
+**MITRE Techniques**: T1566.001, T1566.002  
+
+### Detection Logic
+#### Primary Indicators
+- Suspicious sender domains
+- Malicious attachments with known bad hashes
+- Links to suspicious URLs
+- Unusual email patterns
+
+#### Thresholds
+- Multiple emails from same suspicious sender within 1 hour
+- Attachments with known malicious hashes
+- Links to blacklisted domains
+
+### Data Sources
+- Email security gateway logs
+- Antivirus scan results
+- URL reputation feeds
+- User reporting
+
+### Response Actions
+#### Automated
+- Quarantine suspicious emails
+- Block malicious URLs at gateway
+- Isolate affected endpoints
+
+#### Manual
+- Security analyst investigation
+- User notification and education
+- Threat intelligence updates
+
+### Approval Requirements
+- No approval required for automated quarantine
+- Manual approval needed for endpoint isolation
+
+### Risk Adjustments
+- +20 if targeting executive accounts
+- +15 if known malicious sender
+- +25 if credential harvesting detected
+
+### Version History
+- v1.0 - Initial playbook creation
+- v1.1 - Added URL blocking capability
+- v1.2 - Enhanced risk scoring
+
+### Notes
+This playbook focuses on email-based phishing attacks with both attachment and link-based delivery methods.

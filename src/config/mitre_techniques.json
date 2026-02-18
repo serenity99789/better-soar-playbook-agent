@@ -1,0 +1,92 @@
+{
+  "T1110": {
+    "id": "T1110",
+    "name": "Brute Force",
+    "description": "Adversaries may use brute force techniques to gain access to accounts.",
+    "tactics": ["Credential Access"],
+    "platforms": ["Windows", "Linux", "macOS"],
+    "data_sources": ["Active Directory", "Authentication logs", "VPN logs"],
+    "detection_indicators": ["Multiple failed logins", "Account lockouts", "Unusual login patterns"]
+  },
+  "T1110.003": {
+    "id": "T1110.003",
+    "name": "Password Spraying",
+    "description": "Adversaries may use a single password against multiple accounts.",
+    "tactics": ["Credential Access"],
+    "platforms": ["Windows", "Linux", "macOS", "Cloud"],
+    "data_sources": ["Active Directory", "Authentication logs", "Cloud logs"],
+    "detection_indicators": ["Same password used across multiple accounts", "Low failure rate per account", "Broad targeting"]
+  },
+  "T1078": {
+    "id": "T1078",
+    "name": "Valid Accounts",
+    "description": "Adversaries may obtain and abuse credentials of existing accounts.",
+    "tactics": ["Defense Evasion", "Persistence", "Privilege Escalation", "Initial Access"],
+    "platforms": ["Windows", "Linux", "macOS", "Cloud"],
+    "data_sources": ["Authentication logs", "Account management", "Cloud logs"],
+    "detection_indicators": ["Impossible travel", "Unusual access patterns", "Privileged account usage"]
+  },
+  "T1621": {
+    "id": "T1621",
+    "name": "Multi-Factor Authentication Request Generation",
+    "description": "Adversaries may generate MFA requests to push notifications.",
+    "tactics": ["Credential Access"],
+    "platforms": ["Windows", "Linux", "macOS", "Cloud"],
+    "data_sources": ["MFA logs", "Authentication logs"],
+    "detection_indicators": ["Multiple MFA push requests", "MFA fatigue attacks", "Push bombing"]
+  },
+  "T1098": {
+    "id": "T1098",
+    "name": "Account Manipulation",
+    "description": "Adversaries may manipulate accounts to maintain access.",
+    "tactics": ["Persistence", "Privilege Escalation"],
+    "platforms": ["Windows", "Linux", "macOS", "Cloud"],
+    "data_sources": ["Account management", "Audit logs", "Cloud logs"],
+    "detection_indicators": ["Privilege escalation", "Account creation", "Group membership changes"]
+  },
+  "T1204": {
+    "id": "T1204",
+    "name": "User Execution",
+    "description": "Adversaries may rely on user-executed code.",
+    "tactics": ["Execution"],
+    "platforms": ["Windows", "Linux", "macOS"],
+    "data_sources": ["Process monitoring", "File monitoring", "EDR logs"],
+    "detection_indicators": ["Suspicious process execution", "Unusual file execution", "User-initiated malware"]
+  },
+  "T1059.001": {
+    "id": "T1059.001",
+    "name": "PowerShell",
+    "description": "Adversaries may abuse PowerShell for execution.",
+    "tactics": ["Execution"],
+    "platforms": ["Windows"],
+    "data_sources": ["Process monitoring", "Command logs", "PowerShell logs"],
+    "detection_indicators": ["Encoded PowerShell commands", "Suspicious PowerShell usage", "DownloadString usage"]
+  },
+  "T1566.001": {
+    "id": "T1566.001",
+    "name": "Spearphishing Attachment",
+    "description": "Adversaries may send emails with malicious attachments.",
+    "tactics": ["Initial Access"],
+    "platforms": ["Windows", "Linux", "macOS"],
+    "data_sources": ["Email logs", "Network traffic", "Antivirus"],
+    "detection_indicators": ["Malicious attachments", "Suspicious email senders", "Unusual file types"]
+  },
+  "T1566.002": {
+    "id": "T1566.002",
+    "name": "Spearphishing Link",
+    "description": "Adversaries may send emails with malicious links.",
+    "tactics": ["Initial Access"],
+    "platforms": ["Windows", "Linux", "macOS"],
+    "data_sources": ["Email logs", "Web proxy", "DNS logs"],
+    "detection_indicators": ["Malicious URLs", "Phishing links", "Suspicious domains"]
+  },
+  "T1566.003": {
+    "id": "T1566.003",
+    "name": "Spearphishing via Service",
+    "description": "Adversaries may use third-party services for phishing.",
+    "tactics": ["Initial Access"],
+    "platforms": ["Windows", "Linux", "macOS"],
+    "data_sources": ["Email logs", "Cloud service logs"],
+    "detection_indicators": ["Third-party service abuse", "Cloud-based phishing", "Service impersonation"]
+  }
+}
