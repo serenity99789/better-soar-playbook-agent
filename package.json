@@ -22,7 +22,8 @@
     "moment": "^2.29.4",
     "joi": "^17.11.0",
     "fs-extra": "^11.1.1",
-    "path": "^0.12.7"
+    "path": "^0.12.7",
+    "axios": "^1.6.7"
   },
   "devDependencies": {
     "nodemon": "^3.0.2",

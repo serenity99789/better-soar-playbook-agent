@@ -13,6 +13,7 @@ const MITREMapper = require('./src/core/MITREMapper');
 const ReverseQueryEngine = require('./src/core/ReverseQueryEngine');
 const ApprovalGateEngine = require('./src/core/ApprovalGateEngine');
 const VersionControlEngine = require('./src/core/VersionControlEngine');
+const SmartInputProcessor = require('./src/core/SmartInputProcessor');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -66,6 +67,7 @@ const mitreMapper = new MITREMapper();
 const reverseQueryEngine = new ReverseQueryEngine();
 const approvalGateEngine = new ApprovalGateEngine();
 const versionControlEngine = new VersionControlEngine();
+const smartInputProcessor = new SmartInputProcessor();
 
 // Load existing versions on startup
 versionControlEngine.loadVersions().catch(console.error);
@@ -110,8 +112,20 @@ app.post('/api/playbook/generate/text', async (req, res) => {
       return res.status(400).json({ error: 'Text and platform are required' });
     }
 
-    const result = await playbookGenerator.generateFromText(text, platform, options);
-    res.json(result);
+    // Use smart processing with LLM enhancement
+    const processedInput = await smartInputProcessor.processInput(text, 'text', options);
+    
+    const result = await playbookGenerator.generateFromProcessedInput(processedInput, platform, options);
+    
+    res.json({
+      ...result,
+      smart_processing: {
+        llm_enhanced: processedInput.llm_enhanced,
+        llm_provider: processedInput.llm_provider,
+        llm_confidence: processedInput.llm_confidence,
+        llm_insights: processedInput.llm_insights
+      }
+    });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

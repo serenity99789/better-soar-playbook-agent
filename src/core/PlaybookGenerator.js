@@ -1,5 +1,5 @@
 const { v4: uuidv4 } = require('uuid');
-const InputProcessor = require('./InputProcessor');
+const SmartInputProcessor = require('./SmartInputProcessor');
 const MITREMapper = require('./MITREMapper');
 const QueryGenerator = require('./QueryGenerator');
 const FieldMappingEngine = require('./FieldMappingEngine');
@@ -7,7 +7,7 @@ const RiskCalculator = require('./RiskCalculator');
 
 class PlaybookGenerator {
   constructor() {
-    this.inputProcessor = new InputProcessor();
+    this.smartInputProcessor = new SmartInputProcessor();
     this.mitreMapper = new MITREMapper();
     this.queryGenerator = new QueryGenerator();
     this.fieldMapper = new FieldMappingEngine();
@@ -17,8 +17,8 @@ class PlaybookGenerator {
 
   async generateFromText(text, platform, options = {}) {
     try {
-      // Process input text
-      const processedInput = this.inputProcessor.processInput(text, 'text');
+      // Process input with smart processing
+      const processedInput = await this.smartInputProcessor.processInput(text, 'text', options);
       
       // Generate use case from processed input
       const useCase = await this.createUseCase(processedInput, options);
@@ -39,7 +39,13 @@ class PlaybookGenerator {
           generated_at: new Date().toISOString(),
           platform: platform,
           input_type: 'text',
-          use_case_id: useCase.use_case_metadata.use_case_id
+          use_case_id: useCase.use_case_metadata.use_case_id,
+          smart_processing: {
+            llm_enhanced: processedInput.llm_enhanced,
+            llm_provider: processedInput.llm_provider,
+            llm_confidence: processedInput.llm_confidence,
+            llm_insights: processedInput.llm_insights
+          }
         }
       };
     } catch (error) {
@@ -52,8 +58,8 @@ class PlaybookGenerator {
 
   async generateFromFile(filePath, platform, options = {}) {
     try {
-      // Process input file
-      const processedInput = await this.inputProcessor.processInput(filePath, 'file');
+      // Process input file with smart processing
+      const processedInput = await this.smartInputProcessor.processInput(filePath, 'file', options);
       
       // Generate use case from processed input
       const useCase = await this.createUseCase(processedInput, options);
@@ -75,7 +81,13 @@ class PlaybookGenerator {
           platform: platform,
           input_type: 'file',
           file_path: filePath,
-          use_case_id: useCase.use_case_metadata.use_case_id
+          use_case_id: useCase.use_case_metadata.use_case_id,
+          smart_processing: {
+            llm_enhanced: processedInput.llm_enhanced,
+            llm_provider: processedInput.llm_provider,
+            llm_confidence: processedInput.llm_confidence,
+            llm_insights: processedInput.llm_insights
+          }
         }
       };
     } catch (error) {
